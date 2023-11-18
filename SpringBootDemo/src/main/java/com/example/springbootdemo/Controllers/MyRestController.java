@@ -1,5 +1,7 @@
 package com.example.springbootdemo.Controllers;
 
+import com.example.springbootdemo.Services.DataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,27 +14,18 @@ import java.util.stream.IntStream;
 
 @RestController
 public class MyRestController {
+    @Autowired
+    DataService ds;
 
     @GetMapping("/getNames")
-    public static Flux<String> getStrings(){
-
-        Flux<String> values= Flux.just("Luffy","Zoro","sanji","Naruto","Pirate-king" );
-
+    public  Flux<String> getStrings(){
+        Flux<String> values= ds.getStringFlux();
         return values;
 
     }
     @GetMapping("/getNumbers")
-    public static Flux<Integer> getNumbers(){
-        var numbers=Flux.fromStream(IntStream.rangeClosed(0, 15)
-                .boxed()
-                .map(x-> {
-                            Random r = new Random();
-                            int num=r.nextInt(0,15);
-                            x=x+num;
-                            return x;
-                        }
-                )
-        );
+    public  Flux<Integer> getNumbers(){
+        Flux<Integer> numbers= ds.getMathFlux();
         return numbers;
 
     }
